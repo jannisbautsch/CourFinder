@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CourtFinder</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiY291cnRmaW5kZXIiLCJhIjoiY2wzOHdyYWNzMDQ5aDNicjN4Y3R5dWUxbSJ9.0xzUWgVgW6Cv5HmTaPn4ZA</string>
 </resources>
