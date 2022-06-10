@@ -7,14 +7,18 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 
@@ -52,13 +56,51 @@ public class MainActivity extends AppCompatActivity {
         Marker startMarker = new Marker(map);
         startMarker.setPosition(point);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+        startMarker.setTitle("HTW Marker");
         map.getOverlays().add(startMarker);
 
         map.getController().setCenter(point);
+
+
+
+        final MapEventsReceiver mReceive = new MapEventsReceiver(){
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint p) {
+                Toast.makeText(getBaseContext(),p.getLatitude() + " - "+p.getLongitude(), Toast.LENGTH_LONG).show();
+                Marker m = new Marker(map);
+                m.setPosition(new GeoPoint(p.getLatitude(), p.getLongitude()));
+                m.setTextLabelBackgroundColor(
+                        Color.WHITE
+                );
+                m.setTextLabelForegroundColor(
+                        Color.BLACK
+                );
+                m.setTextLabelFontSize(40);
+                m.setTextIcon("New Court");
+
+                m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
+                map.getOverlays()
+                        .add(m);
+                return false;
+            }
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+                return false;
+            }
+        };
+
+        map.getOverlays().add(new MapEventsOverlay(mReceive));
+
     }
+
+
+
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         ArrayList<String> permissionsToRequest = new ArrayList<>();
         for (int i = 0; i < grantResults.length; i++) {
             permissionsToRequest.add(permissions[i]);
