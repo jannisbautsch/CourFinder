@@ -61,12 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         map.getController().setCenter(point);
 
-
-
-        final MapEventsReceiver mReceive = new MapEventsReceiver(){
+        final MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                Toast.makeText(getBaseContext(),p.getLatitude() + " - "+p.getLongitude(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), p.getLatitude() + " - " + p.getLongitude(), Toast.LENGTH_LONG).show();
                 Marker m = new Marker(map);
                 m.setPosition(new GeoPoint(p.getLatitude(), p.getLongitude()));
                 m.setTextLabelBackgroundColor(
@@ -75,14 +73,20 @@ public class MainActivity extends AppCompatActivity {
                 m.setTextLabelForegroundColor(
                         Color.BLACK
                 );
-                m.setTextLabelFontSize(40);
-                m.setTextIcon("New Court");
+
+                String courtString1 = String.valueOf(p.getLatitude());
+                String courtString2 = String.valueOf(p.getLongitude());
+
+
+                m.setTextLabelFontSize(50);
+                m.setTextIcon("Court@" + courtString1.substring(0, Math.min(courtString1.length(), 6)) + " - " + courtString2.substring(0, Math.min(courtString2.length(), 6)));
 
                 m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
                 map.getOverlays()
                         .add(m);
                 return false;
             }
+
             @Override
             public boolean longPressHelper(GeoPoint p) {
                 return false;
@@ -92,10 +96,6 @@ public class MainActivity extends AppCompatActivity {
         map.getOverlays().add(new MapEventsOverlay(mReceive));
 
     }
-
-
-
-
 
 
     @Override
