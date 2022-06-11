@@ -1,6 +1,6 @@
 package com.example.courtfinder.model;
 
-public interface ICourtModel {
+public interface ICourt {
 
     String getId();
     String getName ();
