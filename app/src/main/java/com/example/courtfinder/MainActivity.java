@@ -12,6 +12,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.courtfinder.control.NetworkController;
+
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         final MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                Toast.makeText(getBaseContext(), p.getLatitude() + " - " + p.getLongitude(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(getBaseContext(), p.getLatitude() + " - " + p.getLongitude(), Toast.LENGTH_LONG).show();
                 Marker m = new Marker(map);
                 m.setPosition(new GeoPoint(p.getLatitude(), p.getLongitude()));
                 m.setTextLabelBackgroundColor(
@@ -94,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
         };
 
         map.getOverlays().add(new MapEventsOverlay(mReceive));
+
+
+        NetworkController networkController = new NetworkController(MainActivity.this);
+        networkController.makeRequest();
 
     }
 
