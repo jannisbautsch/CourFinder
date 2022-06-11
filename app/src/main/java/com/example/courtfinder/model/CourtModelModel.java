@@ -1,6 +1,6 @@
 package com.example.courtfinder.model;
 
-public class Court implements ICourt{
+public class CourtModelModel implements ICourtModel {
 
     private String id;
     private String name;
@@ -8,7 +8,7 @@ public class Court implements ICourt{
     private float lon;
 
 
-    public Court(String id, String name, float lat, float lon ){
+    public CourtModelModel(String id, String name, float lat, float lon ){
         this.id = id;
         this.name = name;
         this.lat = lat;

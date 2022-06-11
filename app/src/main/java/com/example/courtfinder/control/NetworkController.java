@@ -1,4 +1,4 @@
 package com.example.courtfinder.control;
 
-public class Network {
+public class NetworkController {
 }
