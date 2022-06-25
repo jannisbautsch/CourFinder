@@ -4,11 +4,11 @@ public class Court implements ICourt {
 
     private String id;
     private String name;
-    private float lat;
-    private float lon;
+    private Double lat;
+    private Double lon;
 
 
-    public Court(String name, float lat, float lon ){
+    public Court(String name, double lat, double lon ){
         this.name = name;
         this.lat = lat;
         this.lon = lon;
@@ -25,12 +25,12 @@ public class Court implements ICourt {
     }
 
     @Override
-    public Float getLat() {
+    public Double getLat() {
         return this.lat;
     }
 
     @Override
-    public Float getLon() {
+    public Double getLon() {
         return this.lon;
     }
 }

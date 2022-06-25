@@ -4,8 +4,8 @@ public interface ICourt {
 
     String getId();
     String getName ();
-    Float getLat();
-    Float getLon();
+    Double getLat();
+    Double getLon();
 
 
 }
