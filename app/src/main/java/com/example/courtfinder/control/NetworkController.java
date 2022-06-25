@@ -7,38 +7,50 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.courtfinder.MainActivity;
+
+import org.json.JSONArray;
 
 public class NetworkController implements INetworkController {
 
-    private RequestQueue queue;
-    private StringRequest stringRequest;
-    private String url;
-    private Context ctx;
 
-    public NetworkController(Context ctx){
+    private static NetworkController instance;
+    private final Context ctx;
+    private RequestQueue requestQueue;
+
+    private NetworkController(Context ctx) {
         this.ctx = ctx;
-    };
+    }
 
-    public void makeRequest(){
-        this.url = "https://courtfinder-api.herokuapp.com/api/allCourts";
-        this.queue = Volley.newRequestQueue(ctx);
+    public static synchronized NetworkController getInstance(Context ctx) {
+        if (instance == null) {
+            instance = new NetworkController(ctx);
+        }
+        return instance;
+    }
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+    public void makeRequest() {
+        String url = "https://courtfinder-api.herokuapp.com/api/allCourts";
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(String response) {
-                Toast.makeText(ctx, response, Toast.LENGTH_LONG).show();
-            }}, new Response.ErrorListener(){
-            public void onErrorResponse(VolleyError error){Toast.makeText(ctx, "error", Toast.LENGTH_LONG).show(); }
+            public void onResponse(JSONArray response) {
+                Toast.makeText(ctx, response.toString(), Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ctx, "error", Toast.LENGTH_LONG).show();
+            }
 
         });
 
-        queue.add(stringRequest);
+//        QueueManager.getInstance(ctx).
+        QueueManager.getInstance(ctx).addToRequestQueue(request);
+
+//        queue.add(request);
     }
-
-
 
 
 }

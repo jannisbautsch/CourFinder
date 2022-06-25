@@ -104,8 +104,9 @@ public class MainActivity extends AppCompatActivity {
         map.getOverlays().add(new MapEventsOverlay(mReceive));
 
 
-        NetworkController networkController = new NetworkController(MainActivity.this);
-        networkController.makeRequest();
+//        NetworkController networkController = new NetworkController(MainActivity.this);
+        NetworkController.getInstance(MainActivity.this).makeRequest();
+//        networkController.makeRequest();
 
     }
 
