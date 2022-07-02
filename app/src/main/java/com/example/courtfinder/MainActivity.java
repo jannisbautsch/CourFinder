@@ -77,13 +77,8 @@ public class MainActivity extends AppCompatActivity {
         final MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint point) {
-//                Toast.makeText(getBaseContext(), p.getLatitude() + " - " + p.getLongitude(), Toast.LENGTH_LONG).show();
 
-//                Court touchCourt = new Court("", p.getLatitude(), p.getLongitude());
                 MapController.getInstance().newCourt(ctx, map, point);
-//                NetworkController.getInstance(ctx).postRequest("https://courtfinder-api.herokuapp.com/api/newCourt", touchCourt);
-//                MapController.getInstance().makeMarker(map, touchCourt);
-
 
                 return false;
             }
