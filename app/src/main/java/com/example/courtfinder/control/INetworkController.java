@@ -10,5 +10,5 @@ public interface INetworkController {
 
     void makeRequest(IVolleyJSONArrayCallback callback, String url);
 
-    void postRequest(String url, Court court);
+    void postRequest(IVolleyJSONCallback callback, String url, Double lat, Double lon);
 }

@@ -20,7 +20,7 @@ public class CourtController implements ICourtController {
     @Override
     public Court newCourt(String name, double lat, double lon) {
         this.court = new Court(name, lat, lon);
-        saveCourt(this.court);
+//        saveCourt(this.court);
         return this.court;
     }
 
@@ -56,7 +56,7 @@ public class CourtController implements ICourtController {
 
 
     @Override
-    public void saveCourt(Court court) {
-
+    public void saveCourt(Context ctx, Court court) {
+//        NetworkController.getInstance(ctx).postRequest("1234", court);
     }
 }

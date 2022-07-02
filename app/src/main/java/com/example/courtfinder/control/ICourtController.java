@@ -14,6 +14,6 @@ public interface ICourtController {
 
     void getAllCourts(Context ctx, MapView map);
 
-    void saveCourt(Court court);
+    void saveCourt(Context ctx, Court court);
 
 }

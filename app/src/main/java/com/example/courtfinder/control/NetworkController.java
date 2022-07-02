@@ -48,13 +48,13 @@ public class NetworkController implements INetworkController {
 
 
     @Override
-    public void postRequest(String url, Court court) {
+    public void postRequest(IVolleyJSONCallback callback, String url, Double lat, Double lon) {
 
         JSONObject object = new JSONObject();
         try {
             //input your API parameters
-            object.put("lat",court.getLat());
-            object.put("lon",court.getLon());
+            object.put("lat", lat);
+            object.put("lon", lon);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -62,8 +62,8 @@ public class NetworkController implements INetworkController {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-//                callback.onSuccessString(response);
-                Toast.makeText(ctx, response.toString(), Toast.LENGTH_LONG).show();
+                callback.onSuccess(response);
+//                Toast.makeText(ctx, response.toString(), Toast.LENGTH_LONG).show();
             }
         }, new Response.ErrorListener() {
 
