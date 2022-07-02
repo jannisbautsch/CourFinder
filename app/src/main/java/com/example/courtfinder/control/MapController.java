@@ -10,7 +10,6 @@ public class MapController {
 
     private static MapController instance;
 
-
     private MapController() {
 
     }

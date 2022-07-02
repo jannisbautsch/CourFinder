@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         MapView map = findViewById(R.id.mapview);
         map.setTileSource(TileSourceFactory.MAPNIK);
-        map.getController().setZoom(17.0);
+        map.getController().setZoom(13.0);
 
         requestPermissionsIfNecessary(new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET
@@ -78,24 +78,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
 //                Toast.makeText(getBaseContext(), p.getLatitude() + " - " + p.getLongitude(), Toast.LENGTH_LONG).show();
-                Marker m = new Marker(map);
-                m.setPosition(new GeoPoint(p.getLatitude(), p.getLongitude()));
-                m.setTextLabelBackgroundColor(
-                        Color.WHITE
-                );
-                m.setTextLabelForegroundColor(
-                        Color.BLACK
-                );
 
-                String courtString1 = String.valueOf(p.getLatitude());
-                String courtString2 = String.valueOf(p.getLongitude());
+                Court touchCourt = new Court("", p.getLatitude(), p.getLongitude());
+                NetworkController.getInstance(ctx).postRequest("https://courtfinder-api.herokuapp.com/api/newCourt", touchCourt);
+                MapController.getInstance().makeMarker(map, touchCourt);
 
-                m.setTextLabelFontSize(50);
-                m.setTextIcon("Court@" + courtString1.substring(0, Math.min(courtString1.length(), 6)) + " - " + courtString2.substring(0, Math.min(courtString2.length(), 6)));
 
-                m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_TOP);
-                map.getOverlays()
-                        .add(m);
                 return false;
             }
 
