@@ -20,7 +20,6 @@ public class CourtController implements ICourtController {
                                                           public void onSuccess() {
 
                                                           }
-
                                                           @Override
                                                           public void onSuccess(JSONArray result) {
                                                               for (int i = 0; i < result.length(); i++) {
@@ -45,10 +44,6 @@ public class CourtController implements ICourtController {
 
 
     @Override
-    public void saveCourt() {
-//        NetworkController.getInstance(ctx).postRequest("1234", court);
-    }
-
     public void newCourt(Context ctx, GeoPoint point, MapView map) {
 
         NetworkController.getInstance(ctx).postRequest(new IVolleyJSONCallback() {
