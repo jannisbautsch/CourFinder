@@ -6,7 +6,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
-public class MapController {
+public class MapController implements IMapController{
 
     private static MapController instance;
     private static MapView map;
