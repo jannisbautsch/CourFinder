@@ -1,124 +1,115 @@
 package com.example.courtfinder;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
-import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.Style;
 
-    public class MainActivity extends AppCompatActivity {
+import com.example.courtfinder.control.CourtController;
+import com.example.courtfinder.control.MapController;
+import com.example.courtfinder.model.Court;
 
-        public final static String MAPBOX_TOKEN = "pk.eyJ1IjoiY291cnRmaW5kZXIiLCJhIjoiY2wzOHdyYWNzMDQ5aDNicjN4Y3R5dWUxbSJ9.0xzUWgVgW6Cv5HmTaPn4ZA";
+import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.CustomZoomButtonsController;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
 
-        MapView mapView;
-        MapboxMap map;
+import java.util.ArrayList;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+public class MainActivity extends AppCompatActivity {
 
-            Mapbox.getInstance(this, MAPBOX_TOKEN);
+    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
-            setContentView(R.layout.activity_main);
-            initViews();
-            initPermissions();
-        }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        protected void initViews() {
-            mapView = findViewById(R.id.map);
+        Context ctx = this.getApplicationContext();
+        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-        }
+        MapView map = findViewById(R.id.mapview);
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        map.getController().setZoom(13.0);
 
-        protected void initPermissions() {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                updateLocation();
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
-                }
+        CourtController courtController = new CourtController();
+
+        requestPermissionsIfNecessary(new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET
+        });
+        map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
+        map.setMultiTouchControls(true);
+
+
+        CompassOverlay compassOverlay = new CompassOverlay(this, map);
+        compassOverlay.enableCompass();
+        map.getOverlays().add(compassOverlay);
+
+        GeoPoint point = new GeoPoint(52.531677, 13.381777);
+        map.getController().setCenter(point);
+
+
+        final MapEventsReceiver mReceive = new MapEventsReceiver() {
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint point) {
+
+                courtController.newCourt(ctx, point, map);
+
+                return false;
             }
-        }
 
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                updateLocation();
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+                return false;
             }
-        }
+        };
 
-        protected void updateLocation() {
-            mapView.getMapAsync(this::onMapReady);
-        }
+        map.getOverlays().add(new MapEventsOverlay(mReceive));
 
-        protected void onMapReady(MapboxMap map) {
-            this.map = map;
-            map.setStyle(Style.MAPBOX_STREETS, this::onMapStyleReady);
-        }
+        courtController.getAllCourts(ctx, map);
 
-        @SuppressLint("MissingPermission") // permissions are already checked in initPermissions
-        protected void onMapStyleReady(Style style) {
-            LocationComponent locationComponent = map.getLocationComponent();
-            locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(this, style).build());
-            locationComponent.setLocationComponentEnabled(true);
-            locationComponent.setCameraMode(CameraMode.TRACKING);
-            locationComponent.setRenderMode(RenderMode.COMPASS);
-
-        }
-
-        @Override
-        protected void onStart() {
-            super.onStart();
-            mapView.onStart();
-        }
-
-        @Override
-        protected void onResume() {
-            super.onResume();
-            mapView.onResume();
-        }
-
-        @Override
-        protected void onPause() {
-            super.onPause();
-            mapView.onPause();
-        }
-
-        @Override
-        protected void onStop() {
-            super.onStop();
-            mapView.onStop();
-        }
-
-        @Override
-        protected void onSaveInstanceState(Bundle outState) {
-            super.onSaveInstanceState(outState);
-            mapView.onSaveInstanceState(outState);
-        }
-
-        @Override
-        public void onLowMemory() {
-            super.onLowMemory();
-            mapView.onLowMemory();
-        }
-
-        @Override
-        protected void onDestroy() {
-            super.onDestroy();
-            mapView.onDestroy();
-        }
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        ArrayList<String> permissionsToRequest = new ArrayList<>();
+        for (int i = 0; i < grantResults.length; i++) {
+            permissionsToRequest.add(permissions[i]);
+        }
+        if (permissionsToRequest.size() > 0) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    permissionsToRequest.toArray(new String[0]),
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    private void requestPermissionsIfNecessary(String[] permissions) {
+        ArrayList<String> permissionsToRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission);
+            }
+        }
+        if (permissionsToRequest.size() > 0) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    permissionsToRequest.toArray(new String[0]),
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+    }
+}
