@@ -8,15 +8,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.example.courtfinder.model.Court;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class NetworkController implements INetworkController {
 
@@ -34,25 +29,23 @@ public class NetworkController implements INetworkController {
         return instance;
     }
 
-    public void makeRequest(final IVolleyJSONArrayCallback callback, String url) {
+    public void getRequest(final IVolleyJSONArrayCallback callback, String url) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 callback.onSuccess(response);
             }
         }, error -> Toast.makeText(ctx, "error", Toast.LENGTH_LONG).show());
-
         QueueManager.getInstance(ctx).addToRequestQueue(request);
-
     }
 
 
     @Override
     public void postRequest(IVolleyJSONCallback callback, String url, Double lat, Double lon) {
-
         JSONObject object = new JSONObject();
         try {
             //input your API parameters
+            object.put("name", "Cool Name");
             object.put("lat", lat);
             object.put("lon", lon);
         } catch (JSONException e) {
@@ -63,10 +56,8 @@ public class NetworkController implements INetworkController {
             @Override
             public void onResponse(JSONObject response) {
                 callback.onSuccess(response);
-//                Toast.makeText(ctx, response.toString(), Toast.LENGTH_LONG).show();
             }
         }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 // TODO: Handle error
@@ -75,7 +66,6 @@ public class NetworkController implements INetworkController {
         });
 
         QueueManager.getInstance(ctx).addToRequestQueue(request);
-
     }
 
 }

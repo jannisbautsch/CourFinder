@@ -10,10 +10,8 @@ import java.util.Map;
 
 public interface ICourtController {
 
-    Court newCourt(String name, double lat, double lon);
-
     void getAllCourts(Context ctx, MapView map);
 
-    void saveCourt(Context ctx, Court court);
+    void saveCourt();
 
 }

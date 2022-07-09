@@ -8,7 +8,8 @@ public class Court implements ICourt {
     private Double lon;
 
 
-    public Court(String name, double lat, double lon ){
+    public Court(String id, String name, double lat, double lon ){
+        this.id = id;
         this.name = name;
         this.lat = lat;
         this.lon = lon;

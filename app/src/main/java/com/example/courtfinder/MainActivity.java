@@ -7,19 +7,14 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 
 import com.example.courtfinder.control.CourtController;
-import com.example.courtfinder.control.IVolleyCallback;
 import com.example.courtfinder.control.MapController;
-import com.example.courtfinder.control.NetworkController;
 import com.example.courtfinder.model.Court;
 
-import org.json.JSONArray;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -48,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.getController().setZoom(13.0);
 
+        CourtController courtController = new CourtController();
+
         requestPermissionsIfNecessary(new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET
         });
@@ -59,26 +56,15 @@ public class MainActivity extends AppCompatActivity {
         compassOverlay.enableCompass();
         map.getOverlays().add(compassOverlay);
 
-        GeoPoint point = new GeoPoint(52.456234, 13.525628);
-
-        Marker startMarker = new Marker(map);
-        startMarker.setPosition(point);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
-        startMarker.setTitle("HTW Marker");
-        map.getOverlays().add(startMarker);
-
+        GeoPoint point = new GeoPoint(52.531677, 13.381777);
         map.getController().setCenter(point);
-
-
-        Court court = new Court("court", 52.45447887314478f, 13.521417194442071f);
-        MapController.getInstance().makeMarker(map, court);
 
 
         final MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint point) {
 
-                MapController.getInstance().newCourt(ctx, map, point);
+                courtController.newCourt(ctx, point, map);
 
                 return false;
             }
@@ -91,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
         map.getOverlays().add(new MapEventsOverlay(mReceive));
 
-        CourtController courtController = new CourtController();
         courtController.getAllCourts(ctx, map);
 
     }

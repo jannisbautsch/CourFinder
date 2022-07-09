@@ -8,8 +8,6 @@ import com.android.volley.toolbox.Volley;
 
 public class QueueManager {
 
-    //@TODO put into java package!
-
     private static QueueManager instance;
     private static Context ctx;
     private RequestQueue requestQueue;

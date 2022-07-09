@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 public interface INetworkController {
 
-    void makeRequest(IVolleyJSONArrayCallback callback, String url);
+    void getRequest(IVolleyJSONArrayCallback callback, String url);
 
     void postRequest(IVolleyJSONCallback callback, String url, Double lat, Double lon);
 }
