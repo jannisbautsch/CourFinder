@@ -8,16 +8,16 @@ import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
 public class UserTest {
-    
+
     @Test
-    public void emailValidator_EmailIsEmpty() {
+    public void emailIsEmpty() {
         User user =  new User("", "courtfinder123");
         int loginCode = user.isValid();
         assertEquals(loginCode, (0));
     }
 
     @Test
-    public void emailValidator_NotValidEmailAdress() {
+    public void notValidEmailAdress() {
         User user =  new User("admin", "courtfinder123");
         int loginCode = user.isValid();
         assertEquals(loginCode, (1));
@@ -25,7 +25,7 @@ public class UserTest {
 
 
     @Test
-    public void emailValidator_PasswordIsEmpty() {
+    public void passwordIsEmpty() {
         User user =  new User("hello@courtfinder.com", "");
         int loginCode = user.isValid();
         assertEquals(loginCode, (2));
@@ -33,14 +33,14 @@ public class UserTest {
 
 
     @Test
-    public void emailValidator_PasswordToShort() {
+    public void passwordToShort() {
         User user =  new User("hello@courtfinder.com", "court");
         int loginCode = user.isValid();
         assertEquals(loginCode, (3));
     }
 
     @Test
-    public void emailValidator_CorrectEmail() {
+    public void correctEmail() {
         User user =  new User("hello@courtfinder.com", "courtfinder123");
         int loginCode = user.isValid();
         assertEquals(loginCode, (-1));
