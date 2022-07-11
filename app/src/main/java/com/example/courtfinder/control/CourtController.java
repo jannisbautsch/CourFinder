@@ -55,10 +55,7 @@ public class CourtController implements ICourtController {
             public void onSuccess(JSONObject response) {
                 Court court = new Court(response.toString(), "coolName", point.getLatitude(), point.getLongitude());
                 MapController.getInstance(map).makeMarker(court);
-
             }
         }, "https://courtfinder-api.herokuapp.com/api/newCourt", point.getLatitude(), point.getLongitude());
-
     }
-
 }
