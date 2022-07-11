@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         compassOverlay.enableCompass();
         map.getOverlays().add(compassOverlay);
 
-        GeoPoint point = new GeoPoint(52.531677, 13.381777);
+        GeoPoint point = new GeoPoint(52.5166646, 13.386831786);
         map.getController().setCenter(point);
 
 
