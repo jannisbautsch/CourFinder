@@ -6,25 +6,24 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class LogInActivityTest {
@@ -34,30 +33,30 @@ public class LogInActivityTest {
             new ActivityTestRule<>(LogInActivity.class, false, true);
 
     @Before
-    public void setUp() throws Exception{
+    public void A_setUp() throws Exception{
         Intents.init();
     }
 
     @Test
-    public void displayEmailTextField() {
+    public void B_displayEmailTextField() {
         onView(withId(R.id.email)).
                 check(matches(isDisplayed()));
     }
 
     @Test
-    public void displayPasswordTextField() {
+    public void C_displayPasswordTextField() {
         onView(withId(R.id.password)).
                 check(matches(isDisplayed()));
     }
 
     @Test
-    public void displayLoginButton() {
+    public void D_displayLoginButton() {
         onView(withId(R.id.loginb)).
                 check(matches(isDisplayed()));
     }
 
     @Test
-    public void canLogInAndStartsMainActivity() {
+    public void E_canLogInAndStartsMainActivity() {
         onView(withId(R.id.email)).perform(click()).perform(typeText("hello@courtfinder.de"));
         onView(withId(R.id.password)).perform(click()).perform(typeText("password123"));
         Espresso.closeSoftKeyboard();
