@@ -14,6 +14,7 @@ public class CourtController implements ICourtController {
 
 
     @Override
+    //MapView should not be passed. -loose coupling. should just return a list of courts
     public void getAllCourts(Context ctx, MapView map) {
         NetworkController.getInstance(ctx).getRequest(new IVolleyJSONArrayCallback() {
                                                           @Override
