@@ -33,7 +33,7 @@ public class LogInActivityTest {
             new ActivityTestRule<>(LogInActivity.class, false, true);
 
     @Before
-    public void A_setUp() throws Exception{
+    public void setUp() throws Exception{
         Intents.init();
     }
 
